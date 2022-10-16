@@ -1,21 +1,64 @@
 import { useEffect, useRef, useState } from "react";
+import React from "react";
 import Utils from "../static/utils";
 import WalletButton from "./WalletButton";
 import WalletIcon from "./WalletIcon";
 
-function ConnectModal({ cryptoWallets, openConnectModal, setOpenConnectModal, connectToWallet, connectionWaitingResponse, connectionMessage, setConnectionMessage, walletConnected, connectedAccount, disconnectFromWallet, verifyConnectionToWallet, sendVerificationSignatureToWallet, globalSignature, connectionVerified, providerConnected, ethereumObj }) {
+
+interface WalletConnected  {
+    name: string,
+    label: string,
+    icon: string,
+    backgroundColor?: string
+}
+
+function ConnectModal({ 
+        cryptoWallets, 
+        openConnectModal, 
+        setOpenConnectModal, 
+        connectToWallet, 
+        connectionWaitingResponse, 
+        connectionMessage, 
+        setConnectionMessage, 
+        walletConnected, 
+        connectedAccount, 
+        disconnectFromWallet, 
+        verifyConnectionToWallet, 
+        sendVerificationSignatureToWallet, 
+        globalSignature, 
+        connectionVerified, 
+        providerConnected, 
+        ethereumObj 
+    } : { 
+        cryptoWallets: Array<WalletConnected>, 
+        openConnectModal: Boolean, 
+        setOpenConnectModal: Function, 
+        connectToWallet: Function, 
+        connectionWaitingResponse: Boolean, 
+        connectionMessage: string | null, 
+        setConnectionMessage: Function, 
+        walletConnected: Boolean | null, 
+        connectedAccount: string | null, 
+        disconnectFromWallet: Function, 
+        verifyConnectionToWallet: Function, 
+        sendVerificationSignatureToWallet: Function, 
+        globalSignature: string | null, 
+        connectionVerified: Boolean | null, 
+        providerConnected: string | null, 
+        ethereumObj: any 
+    }) {
     //UseState
-    const [walletSelected, setWalletSelected] = useState(null)
+    const [walletSelected, setWalletSelected] = useState<WalletConnected | null>(null)
 
     //UseRef Variable
-    const containerRef = useRef(null)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (providerConnected) {
-
-            setWalletSelected(cryptoWallets.find(cW => cW.name == providerConnected))
+            let wallet = cryptoWallets.find((cW: any) => cW.name == providerConnected)
+            setWalletSelected(wallet!)
         } else {
-            setWalletSelected(false)
+            setWalletSelected(null)
         }
 
     }, [providerConnected])
@@ -25,12 +68,12 @@ function ConnectModal({ cryptoWallets, openConnectModal, setOpenConnectModal, co
 
     useEffect(() => {
         if (openConnectModal) {
-            if (!containerRef.current.classList.contains('open')) {
-                containerRef.current.classList.add('open')
+            if (containerRef.current!.classList.contains('open')) {
+                containerRef.current!.classList.add('open')
             }
         } else {
-            if (containerRef.current.classList.contains('open')) {
-                containerRef.current.classList.remove('open')
+            if (containerRef.current!.classList.contains('open')) {
+                containerRef.current!.classList.remove('open')
             }
         }
     }, [openConnectModal])
@@ -47,7 +90,7 @@ function ConnectModal({ cryptoWallets, openConnectModal, setOpenConnectModal, co
                 <div className="flex justify-center px-2">
                     {
                         walletConnected ?
-                            <WalletIcon size={10} icon={walletSelected.icon} />
+                            <WalletIcon size={10} icon={walletSelected!.icon} />
                             : ''
                     }
                 </div>
@@ -72,7 +115,7 @@ function ConnectModal({ cryptoWallets, openConnectModal, setOpenConnectModal, co
                         <div className="flex justify-center flex-col">
                             {
                                 !globalSignature ?
-                                    <button onClick={sendVerificationSignatureToWallet} className="inline-flex justify-center rounded-md border border-transparent bg-orange-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-orange-400 sm:hidden">
+                                    <button onClick={() => sendVerificationSignatureToWallet()} className="inline-flex justify-center rounded-md border border-transparent bg-orange-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-orange-400 sm:hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6">
                                             <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
                                             <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
@@ -81,20 +124,20 @@ function ConnectModal({ cryptoWallets, openConnectModal, setOpenConnectModal, co
                                     </button>
                                     :
                                     connectionVerified == false ?
-                                        <button onClick={verifyConnectionToWallet} className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-red-400 sm:hidden">
+                                        <button onClick={() => verifyConnectionToWallet()} className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-red-400 sm:hidden">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                 <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
                                             </svg>
                                         </button>
                                         :
                                         connectionVerified == true ?
-                                            <button onClick={verifyConnectionToWallet} className="inline-flex justify-center rounded-md border border-transparent bg-green-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-green-400 sm:hidden">
+                                            <button onClick={() => verifyConnectionToWallet()} className="inline-flex justify-center rounded-md border border-transparent bg-green-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-green-400 sm:hidden">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                     <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
                                                 </svg>
                                             </button>
                                             :
-                                            <button onClick={verifyConnectionToWallet} className="inline-flex justify-center rounded-md border border-transparent bg-slate-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-slate-400 sm:hidden">
+                                            <button onClick={() => verifyConnectionToWallet()} className="inline-flex justify-center rounded-md border border-transparent bg-slate-500 px-1.5 py-1.5 mr-2 text-sm font-medium text-white hover:bg-slate-400 sm:hidden">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                     <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
                                                 </svg>
@@ -113,7 +156,7 @@ function ConnectModal({ cryptoWallets, openConnectModal, setOpenConnectModal, co
                                     <path fillRule="evenodd" d="M19.902 4.098a3.75 3.75 0 00-5.304 0l-4.5 4.5a3.75 3.75 0 001.035 6.037.75.75 0 01-.646 1.353 5.25 5.25 0 01-1.449-8.45l4.5-4.5a5.25 5.25 0 117.424 7.424l-1.757 1.757a.75.75 0 11-1.06-1.06l1.757-1.757a3.75 3.75 0 000-5.304zm-7.389 4.267a.75.75 0 011-.353 5.25 5.25 0 011.449 8.45l-4.5 4.5a5.25 5.25 0 11-7.424-7.424l1.757-1.757a.75.75 0 111.06 1.06l-1.757 1.757a3.75 3.75 0 105.304 5.304l4.5-4.5a3.75 3.75 0 00-1.035-6.037.75.75 0 01-.354-1z" clipRule="evenodd" />
                                 </svg>
                             </button> :
-                            <button onClick={disconnectFromWallet} className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-1 py-1 text-sm font-medium text-white hover:bg-red-400 sm:hidden">
+                            <button onClick={() =>disconnectFromWallet()} className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-1 py-1 text-sm font-medium text-white hover:bg-red-400 sm:hidden">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>

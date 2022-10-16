@@ -1,6 +1,13 @@
 import WalletIcon from "./WalletIcon";
 
-function WalletButton({ WalletInfo, setWalletSelected }) {
+interface WalletConnected  {
+    name: string,
+    label: string,
+    icon: string,
+    backgroundColor?: string
+}
+
+function WalletButton({ WalletInfo, setWalletSelected }: { WalletInfo: WalletConnected, setWalletSelected: Function }) {
 
 
     return (

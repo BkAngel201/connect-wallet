@@ -8,16 +8,16 @@ import NavBar from './components/NavBar';
 
 function App() {
     //UseState Hooks
-    const [walletConnected, setWalletConnected] = useState(false)
-    const [providerConnected, setProviderConnected] = useState(null)
-    const [ethereumObj, setEthereumObj] = useState(null)
-    const [connectionMessage, setConnectionMessage] = useState(null)
-    const [connectedAccount, setConnectedAccount] = useState(null)
-    const [Web3Provider, setWeb3Provider] = useState(null)
-    const [verificationMessageSigning, setVerificationMessageSigning] = useState(null)
-    const [globalSignature, setGlobalSignature] = useState(null)
-    const [connectionWaitingResponse, setConnectionWaitingResponse] = useState(false)
-    const [connectionVerified, setConnectionVerified] = useState(null)
+    const [walletConnected, setWalletConnected] = useState<Boolean | null>(false)
+    const [providerConnected, setProviderConnected] = useState<string | null>(null)
+    const [ethereumObj, setEthereumObj] = useState<any | null>(null)
+    const [connectionMessage, setConnectionMessage] = useState<string | null>(null)
+    const [connectedAccount, setConnectedAccount] = useState<string | null>(null)
+    const [Web3Provider, setWeb3Provider] = useState<any | null>(null)
+    const [verificationMessageSigning, setVerificationMessageSigning] = useState<string | null>(null)
+    const [globalSignature, setGlobalSignature] = useState<string | null>(null)
+    const [connectionWaitingResponse, setConnectionWaitingResponse] = useState<Boolean | null>(false)
+    const [connectionVerified, setConnectionVerified] = useState<Boolean | null>(null)
 
     //USeState Visuals
     const [openConnectModal, setOpenConnectModal] = useState(false)
@@ -25,7 +25,7 @@ function App() {
 
 
     //useRef
-    const sideMenuRef = useRef(null)
+    const sideMenuRef = useRef<HTMLDivElement>(null)
 
     //Data
     const cryptoWallets = [
@@ -47,12 +47,12 @@ function App() {
     //Behavior UseEffect
     useEffect(() => {
         if (openSideMenu) {
-            if (!sideMenuRef.current.classList.contains('open')) {
-                sideMenuRef.current.classList.add('open')
+            if (!sideMenuRef.current!.classList!.contains('open')) {
+                sideMenuRef.current!.classList.add('open')
             }
         } else {
-            if (sideMenuRef.current.classList.contains('open')) {
-                sideMenuRef.current.classList.remove('open')
+            if (sideMenuRef.current!.classList.contains('open')) {
+                sideMenuRef.current!.classList.remove('open')
             }
         }
     }, [openSideMenu])
@@ -63,10 +63,10 @@ function App() {
 
     useEffect(() => {
         try {
-            const { ethereum } = window;
+            let ethereum = window.ethereum;
             if (ethereum) {
                 setEthereumObj(ethereum)
-                setProviderConnected(localStorage.getItem('ProviderConnected'))
+                setProviderConnected(localStorage.getItem('ProviderConnected')!)
                 if (ethereum.isMetaMask) {
                     setWeb3Provider(new Web3(ethereum))
                 } else {
@@ -78,24 +78,29 @@ function App() {
                 console.log('No Ethereum Compatible Provider Found.')
             }
         } catch (err) {
-            setConnectionMessage(err.message)
+            if (err instanceof Error) {
+                setConnectionMessage(err.message)
+              } else {
+                console.log('Unexpected error', err);
+              }
+            
         }
         
     }, [])
 
     useEffect(() => {
         if (Web3Provider) {
-            if (localStorage.getItem('WalletConnected') !== 'null') {
-                Web3Provider.eth.net.isListening().then(response => {
+            if (localStorage.getItem('ProviderConnected') !== 'null') {
+                Web3Provider.eth.net.isListening().then((response: any) => {
                     if (response) {
                         setWalletConnected(true)
-                        Web3Provider.eth.requestAccounts().then(response => {
+                        Web3Provider.eth.requestAccounts().then((response: any) => {
                             setConnectedAccount(response[0]);
-                        }).catch(err => {
+                        }).catch((err: Error) => {
                             setConnectionMessage(err.message)
                         })
                     }
-                }).catch(err => {
+                }).catch((err: Error) => {
                     setConnectionMessage(err.message)
                 })
             }
@@ -110,19 +115,19 @@ function App() {
         setConnectionMessage(null)
         setWalletConnected(false)
         setConnectedAccount(null)
-        localStorage.setItem('ProviderConnected', null)
+        localStorage.setItem('ProviderConnected', 'null')
         setProviderConnected(null)
         setConnectionVerified(null)
     }
 
-    let connectToMetaMask = async (wallet) => {
+    let connectToMetaMask = async (wallet: string) => {
         setConnectionWaitingResponse(true)
         setConnectionMessage(null)
-        ethereumObj.request({ method: 'eth_requestAccounts' }).then(res_requestAccounts => {
-            ethereumObj.request({ method: 'eth_accounts' }).then(async (res_accounts) => {
+        ethereumObj.request({ method: 'eth_requestAccounts' }).then((res_requestAccounts: any) => {
+            ethereumObj!.request({ method: 'eth_accounts' }).then(async (res_accounts: any) => {
                 const tempConnectedAccount = res_accounts[0]
                 setConnectedAccount(tempConnectedAccount);
-                sendMetaMaskVerificationSignature(tempConnectedAccount).then(response => {
+                sendMetaMaskVerificationSignature(tempConnectedAccount).then((response: any) => {
                     setProviderConnected(wallet)
                     localStorage.setItem('ProviderConnected', wallet)
                     localStorage.setItem('onLoadConnect', "true")
@@ -140,24 +145,24 @@ function App() {
 
 
 
-            }).catch(err => {
+            }).catch((err: Error) => {
                 setConnectionMessage(err.message)
             })
-        }).catch(err => {
+        }).catch((err: Error)=> {
             setConnectionMessage(err.message)
         })
     }
 
     let verifyMetaMaskConnection = async () => {
         const recoveredAddress = Web3Provider.eth.accounts.recover(verificationMessageSigning, globalSignature);
-        if (recoveredAddress.toLowerCase() === connectedAccount.toLowerCase()) {
+        if (recoveredAddress.toLowerCase() === connectedAccount!.toLowerCase()) {
             setConnectionVerified(true)
         } else {
             setConnectionVerified(false)
         }
     }
 
-    let sendMetaMaskVerificationSignature = async (account) => {
+    let sendMetaMaskVerificationSignature = async (account: string) => {
 
         return new Promise(async (resolve, reject) => {
             const randomMessage = Utils.functions.generateRandomMessage(20)
@@ -166,7 +171,7 @@ function App() {
                 window.location.hostname,
                 account,
                 `I accept the ServiceOrg Terms of Service: ${window.location.hostname}`,
-                window.location,
+                window.location.toString(),
                 chainId,
                 randomMessage,
                 new Date().toISOString()
@@ -187,7 +192,7 @@ function App() {
 
     }
 
-    let connectToWallet = (wallet) => {
+    let connectToWallet = (wallet: string) => {
         switch (wallet) {
             case 'walletC': {
 
@@ -222,10 +227,10 @@ function App() {
                 break;
             }
             case 'meta': {
-                sendMetaMaskVerificationSignature(connectedAccount).then(response => {
+                sendMetaMaskVerificationSignature(connectedAccount!).then((response: any) => {
                     setGlobalSignature(response.signature)
                     setVerificationMessageSigning(response.verifyMessage)
-                }).catch(err => {
+                }).catch((err: any) => {
                     console.log(err)
                     setConnectionMessage(err.message)
                     setGlobalSignature(null)
@@ -235,20 +240,6 @@ function App() {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     return (
@@ -311,7 +302,7 @@ function App() {
                 </div>
             </div>
             <ConnectModal
-                connectionWaitingResponse={connectionWaitingResponse}
+                connectionWaitingResponse={connectionWaitingResponse!}
                 setConnectionMessage={setConnectionMessage}
                 connectionMessage={connectionMessage}
                 connectToWallet={connectToWallet}

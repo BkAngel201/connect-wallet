@@ -1,6 +1,6 @@
 const Utils = {
     functions: {
-        formatWalletAccountShort(accountNumber, sliceSize = 6) {
+        formatWalletAccountShort(accountNumber: string | null, sliceSize = 6) {
             if (accountNumber) {
                 let front = accountNumber.slice(0, sliceSize)
                 let back = accountNumber.slice(accountNumber.length - 1 - sliceSize, accountNumber.length - 1)
@@ -10,7 +10,7 @@ const Utils = {
                 return ''
             }
         },
-        generateRandomMessage(length) {
+        generateRandomMessage(length: Number) {
             let  result = '';
             let characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -19,7 +19,7 @@ const Utils = {
             }
             return result;
         },
-        generateEIP4361Signature(domain, address, statement, uri, chainId, nonce, issuedAt) {
+        generateEIP4361Signature(domain: string, address: string, statement: string, uri: string, chainId: string, nonce: string, issuedAt: string) {
             return `${domain} wants you to sign in with your Ethereum account:
 ${address}
 
