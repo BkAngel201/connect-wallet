@@ -68,7 +68,7 @@
             }
     .SideBar,
     .SideBar.open {
-            display: flex;
+            display: flex !important;
         }
 }
 
