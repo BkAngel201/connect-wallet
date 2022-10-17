@@ -60,7 +60,13 @@ function App() {
             let ethereum = window.ethereum;
             if (ethereum) {
                 setEthereumObj(ethereum)
-                setProviderConnected(localStorage.getItem('ProviderConnected')!)
+                let providerSaved = localStorage.getItem('ProviderConnected')
+                if(providerSaved) {
+                    setProviderConnected(providerSaved)
+                } else {
+                    setProviderConnected('null')
+                    localStorage.setItem('ProviderConnected', 'null')
+                }
                 if (ethereum.isMetaMask) {
                     setWeb3Provider(new Web3(ethereum))
                 } else {
