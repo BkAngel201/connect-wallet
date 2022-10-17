@@ -18,7 +18,7 @@
         display: none !important;
     }
     .SideBar.open {
-        display: flex;
+        display: flex !important;
     }
 
     .FooterNav.open {
