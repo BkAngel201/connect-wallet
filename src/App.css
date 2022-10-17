@@ -15,7 +15,7 @@
 }
 
     .SideBar {
-        display: none;
+        display: none !important;
     }
     .SideBar.open {
         display: flex;
