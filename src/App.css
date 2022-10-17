@@ -57,12 +57,10 @@
     .FooterNav {
         display: none;
     }
-
         .FooterNav.open {
             justify-content: center;
             align-items: center;
         }
-
             .FooterNav.open .expanded {
                 display: flex;
                 max-width: 350px;
