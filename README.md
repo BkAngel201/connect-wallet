@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+# Connect Wallet
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Implement a modal that allows users to connect their crypto wallet to your app using [Metamask](https://docs.metamask.io/guide/) or [WalletConnect](https://docs.walletconnect.com/) similar to [Block Native’s Web3-Onboard](https://onboard.blocknative.com/) modal:
+![](https://lh6.googleusercontent.com/4YoJIphLq27z6ZoMK8tQwXrFbROufVv3ONlIHaupBIjfGHkjE2KuyLo0hgF4x4vPu5Iolb5Ufl5Nzmsk2qp-BY7lp-JJCtW0fmawQbq3DQncCasFP_6PiDP3uh7wr3curp0DMIWEtEaKVikhnGsnrFQVhj0OnPswP3YqHMaEBjU0ri1hTpPhbhmOXw)
 
-## Available Scripts
+## Technologies
+- [Typescript](https://www.typescriptlang.org/)
+- [React](https://reactjs.org/)
+- [Tailwind](https://tailwindcss.com)
+- [Web3 ](https://web3js.readthedocs.io/en/v1.8.0)
 
-In the project directory, you can run:
+## Dependecies
+- [NodeJs](https://nodejs.org/en/)
+- [Metamask Extension](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn)
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Installation
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Clone Repository to a local folder
+- Use command `npm install` on directory to install all necessary packages
 
-### `npm test`
+# Run Server
+- Use command `npm start`
+- Website address `http://localhost:3000`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
+-   Detect that a user is not currently authenticated
+-   Provide a ‘Connect Wallet’ button that opens a modal similar to the screenshot above
+-   Allow users to connect using ‘Metamask’
+-   Once the user selects an option, the app should call out to the appropriate third-party API and establish a connection
+-   If the connection is successful, show the current address of the connected wallet in the UI.
+-   Style the modal consistent with the look/feel of the [Tokensoft app](https://app.tokensoft.io)
 
-### `npm run build`
+### Stretch goals:
+-   Integrate Metamask so that once the user establishes a session, they can authenticate by signing a message per [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361)
+-   Add ability for the user to disconnect from Metamask
+-   Style for mobile devices
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Pending Features
+-   Allow users to use ‘WalletConnect’  (Trying to Use @walletconnect/web3-provider was triggering errors just importing library) [Discussion Link](https://stackoverflow.com/questions/70996225/wallet-connect-web3-provider-showing-a-lot-of-errors-just-by-imoprting)
