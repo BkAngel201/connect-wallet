@@ -1,6 +1,9 @@
 # Connect Wallet
+### Take a look
+[Live Version](https://connect-wallet-two.vercel.app/)
 
 Implement a modal that allows users to connect their crypto wallet to your app using [Metamask](https://docs.metamask.io/guide/) or [WalletConnect](https://docs.walletconnect.com/) similar to [Block Native’s Web3-Onboard](https://onboard.blocknative.com/) modal:
+
 ![](https://lh6.googleusercontent.com/4YoJIphLq27z6ZoMK8tQwXrFbROufVv3ONlIHaupBIjfGHkjE2KuyLo0hgF4x4vPu5Iolb5Ufl5Nzmsk2qp-BY7lp-JJCtW0fmawQbq3DQncCasFP_6PiDP3uh7wr3curp0DMIWEtEaKVikhnGsnrFQVhj0OnPswP3YqHMaEBjU0ri1hTpPhbhmOXw)
 
 ## Technologies
