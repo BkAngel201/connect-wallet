@@ -63,9 +63,6 @@ function ConnectModal({
 
     }, [providerConnected])
 
-
-
-
     useEffect(() => {
         if (openConnectModal) {
             if (containerRef.current!.classList.contains('open')) {
@@ -82,7 +79,6 @@ function ConnectModal({
         setConnectionMessage(null)
         setWalletSelected(null)
     }
-
 
     return (
         <div ref={containerRef} className="FooterNav fixed inset-x-0 bottom-0 flex justify-end z-20">
@@ -108,7 +104,6 @@ function ConnectModal({
                             :
                             ''
                     }
-
                 </div>
                 {
                     walletConnected ?
